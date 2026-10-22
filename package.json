@@ -5,8 +5,8 @@
   "type": "module",
   "packageManager": "bun@1.4.3",
   "scripts": {
-    "dev": "wrangler pages dev",
-    "deploy": "wrangler pages deploy"
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
   },
   "devDependencies": {
     "wrangler": "4.150.0"

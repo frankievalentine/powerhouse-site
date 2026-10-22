@@ -1,8 +1,9 @@
-// Cloudflare Pages project for the powerhouse site. Static files only: the
-// site is public/, served as is, with no build step.
+// The powerhouse site: static files in public/, served by a Worker with no
+// code of its own (Workers static assets, which Cloudflare now calls Pages).
+// public/_headers sets the security headers.
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "usepowerhouse",
-  "pages_build_output_dir": "public",
-  "compatibility_date": "2026-06-11"
+  "compatibility_date": "2026-06-11",
+  "assets": { "directory": "./public" }
 }

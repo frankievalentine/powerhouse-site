@@ -2,12 +2,12 @@
 
 The one-screen site for [powerhouse](https://github.com/frankievalentine/powerhouse): the live orb and a scripted demo of what powerhouse does, in light and dark.
 
-Plain HTML, CSS and JavaScript in `public/`, with no build step, deployed to Cloudflare Pages.
+Plain HTML, CSS and JavaScript in `public/`, with no build step, served by a Cloudflare Worker as static assets (what Cloudflare now calls Pages).
 
 ```sh
 bun install
-bun run dev      # http://localhost:8788, reloads on save
-bun run deploy   # deploy public/ to Cloudflare Pages
+bun run dev      # http://localhost:8787
+bun run deploy   # deploy public/ to Cloudflare
 ```
 
 ## What's where
