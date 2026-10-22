@@ -1,0 +1,8 @@
+// Cloudflare Pages project for the powerhouse site. Static files only: the
+// site is public/, served as is, with no build step.
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "powerhouse-site",
+  "pages_build_output_dir": "public",
+  "compatibility_date": "2026-06-11"
+}
