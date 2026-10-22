@@ -348,7 +348,7 @@
   const FEATURES = [
     {
       title: "Routing to roles", hue: 30,
-      text: "Describe the job in plain words. Cloudflare's Clef model picks the role that fits, each with its own instructions, skills, tools and model.",
+      text: "Describe the job in plain words. Cloudflare's Clef Flash model picks the role that fits in about 0.3 seconds. Each role has its own instructions, skills, tools and model.",
       async run(id) {
         await type("Summarize this week's Cloudflare Agents SDK releases for the team", id);
         const a = job("routing", "Clef is picking a role", { busy: true, meta: "Clef Flash" });
