@@ -102,6 +102,9 @@ h1 { margin: 0; font-size: clamp(36px, 4.4vw, 58px); line-height: 1.02; letter-s
 .ctas { display: flex; gap: 10px; flex-wrap: wrap; }
 .btn { display: inline-flex; align-items: center; gap: 8px; min-height: 46px; padding: 0 20px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 15px; }
 .btn-primary { background: var(--fg); color: var(--bg); }
+/* Cloudflare's own Deploy to Cloudflare button, as it appears in READMEs. */
+.deploy { display: inline-flex; align-items: center; min-height: 46px; border-radius: 8px; }
+.deploy img { display: block; height: 40px; width: auto; }
 .btn-secondary { border: 1px solid var(--line-strong); }
 .btn-secondary:hover { background: var(--surface); }
 .oss { margin: -10px 0 0; font-family: var(--mono); font-size: 12px; color: var(--muted); }
@@ -151,7 +154,8 @@ h1 { margin: 0; font-size: clamp(36px, 4.4vw, 58px); line-height: 1.02; letter-s
 @keyframes rise { from { opacity: 0; transform: translateY(6px); } }
 
 .toast { position: fixed; top: calc(16px + env(safe-area-inset-top, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); width: min(320px, calc(100% - 32px)); display: flex; gap: 12px; padding: 12px 14px; background: var(--surface); border-radius: 16px; box-shadow: var(--shadow); font-size: 13px; line-height: 1.4; animation: drop 0.5s both cubic-bezier(0.16, 1, 0.3, 1); z-index: 2; }
-.toast-orb { flex: none; width: 34px; height: 34px; border-radius: 9px; background: radial-gradient(circle at 50% 50%, #fff 0, transparent 0), radial-gradient(circle at 36% 30%, #fff 0, #efebe4 20%, #c4bcb1 60%, #6f675e 100%); box-shadow: inset 0 0 0 2px rgb(101 120 255 / 0.35); }
+/* The app's own notification icon: the light orb. */
+.toast-orb { flex: none; width: 34px; height: 34px; padding: 3px; box-sizing: border-box; border-radius: 9px; background: var(--bg); }
 .toast b { display: block; font-size: 13px; }
 .toast span { color: var(--muted); }
 .toast small { font-family: var(--mono); font-size: 10px; color: var(--muted); display: block; margin-bottom: 2px; }

@@ -286,7 +286,7 @@
       slot.replaceChildren();
       if (state.toast) {
         slot.append(el("div", { class: "toast", role: "status" },
-          el("span", { class: "toast-orb", "aria-hidden": "true" }),
+          el("img", { class: "toast-orb", src: "/orb-icon.png", alt: "", width: "34", height: "34" }),
           el("div", {}, el("small", {}, "powerhouse · now"), el("b", {}, state.toast.title), el("span", {}, state.toast.body))));
       }
     }
@@ -536,14 +536,22 @@
     requestAnimationFrame(progress);
   })();
 
+  // The demo plays this many chapters, then offers to play again.
+  const MAX_CHAPTERS = 10;
+  let finished = false;
+  const control = $("pause");
+  const showControl = () => { control.textContent = finished ? "Play again" : paused ? "Play demo" : "Pause demo"; };
+
   async function start(from) {
     const id = ++runId;
+    finished = false;
+    showControl();
     approveNow = null;
     state.toast = null; state.placeholder = null; state.prompt = ""; state.typing = false;
     // Jumping to a chapter drops jobs the interrupted one left running.
     state.jobs = state.jobs.filter((j) => j.done);
     render();
-    for (let i = from; ; i = (i + 1) % FEATURES.length) {
+    for (let i = from, played = 1; ; i = (i + 1) % FEATURES.length, played++) {
       markFeature(i);
       chapterStart = performance.now(); pausedTotal = 0; if (paused) pausedAt = chapterStart;
       try {
@@ -557,13 +565,23 @@
       // Keep finished jobs a moment, then let them settle out like the app.
       state.jobs = state.jobs.filter((j) => !j.done || state.jobs.indexOf(j) < 2);
       render();
+      if (played >= MAX_CHAPTERS) {
+        finished = true;
+        showControl();
+        return;
+      }
     }
   }
 
-  $("pause").addEventListener("click", (e) => {
+  control.addEventListener("click", () => {
+    if (finished) {
+      paused = false;
+      start(0);
+      return;
+    }
     paused = !paused;
     if (paused) pausedAt = performance.now(); else pausedTotal += performance.now() - pausedAt;
-    e.currentTarget.textContent = paused ? "Play demo" : "Pause demo";
+    showControl();
   });
 
   applyTheme();
