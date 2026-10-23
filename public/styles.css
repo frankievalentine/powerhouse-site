@@ -86,7 +86,7 @@ button { font: inherit; color: inherit; }
 .top { display: flex; align-items: center; gap: 20px; padding-block: 16px; }
 .word { font-size: 18px; font-weight: 650; letter-spacing: -0.01em; display: flex; align-items: center; gap: 10px; }
 .spacer { flex: 1; }
-/* Theme switch: three icons, fixed in the bottom-right corner. */
+/* Theme switch: three icons, fixed in the bottom-right corner on desktop. */
 .theme { position: fixed; right: max(16px, env(safe-area-inset-right, 0px)); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 4; display: flex; gap: 2px; padding: 2px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); }
 .theme button { display: grid; place-items: center; width: 28px; height: 28px; border: 0; border-radius: 999px; background: transparent; color: var(--muted); cursor: pointer; }
 .theme button:hover { color: var(--fg); }
@@ -169,6 +169,8 @@ h1 { margin: 0; font-size: clamp(36px, 4.4vw, 58px); line-height: 1.02; letter-s
    column, in reading order: the pitch, then the demo, then the feature list that drives it. */
 @media (max-width: 999px) {
   .top, .main { max-width: 640px; }
+  /* The theme switch sits in the header, top right, instead of floating over the page. */
+  .theme { position: static; }
   .top { flex-wrap: wrap; }
   .main { flex-direction: column; align-items: stretch; gap: 28px; }
   .pitch { display: contents; }
