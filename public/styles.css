@@ -120,7 +120,8 @@ h1 { margin: 0; font-size: clamp(36px, 4.4vw, 58px); line-height: 1.02; letter-s
 .feature .bar { flex: none; width: 48px; height: 2px; border-radius: 1px; background: var(--line); overflow: hidden; visibility: hidden; }
 .feature[data-active] .bar { visibility: visible; }
 .feature .bar i { display: block; height: 100%; width: 0; background: var(--fg); }
-.feature p { margin: 0; padding: 0 2px 12px 22px; font-size: 14px; line-height: 1.5; color: var(--muted); max-width: 36em; }
+/* Every description gets the room of the longest (main.js sets --desc-h), so switching examples moves nothing. */
+.feature p { margin: 0; padding: 0 2px 12px 22px; font-size: 14px; line-height: 1.5; color: var(--muted); max-width: 36em; min-height: var(--desc-h, 0); }
 .demo-controls { display: flex; align-items: center; gap: 12px; font-size: 13px; color: var(--muted); }
 .demo-controls button { white-space: nowrap; border: 1px solid var(--line-strong); background: transparent; border-radius: 9px; min-height: 32px; padding: 0 12px; cursor: pointer; font-size: 13px; }
 
@@ -137,12 +138,14 @@ h1 { margin: 0; font-size: clamp(36px, 4.4vw, 58px); line-height: 1.02; letter-s
 .send { flex: none; width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--fg); color: var(--bg); }
 @keyframes blink { 50% { opacity: 0; } }
 
-.pills { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; min-height: 160px; }
+/* Room for the busiest moment (three cards, one with buttons), so the stage never changes height. */
+.pills { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 6px; min-height: 184px; }
 .pill { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; padding: 11px 14px; background: var(--surface); border-radius: 14px; box-shadow: var(--shadow-sm); font-size: 14px; animation: rise 0.45s both cubic-bezier(0.16, 1, 0.3, 1); border: 1px solid transparent; }
 .pill[data-alert] { border-color: color-mix(in oklab, var(--warn) 55%, transparent); }
 .pill .d { width: 8px; height: 8px; border-radius: 2px; flex: none; background: var(--hue); }
-.pill b { font-weight: 600; }
-.pill .act { flex: 1 1 160px; min-width: 0; color: var(--muted); }
+/* One line, like the app's job pills: a long activity ends in "..." instead of wrapping. */
+.pill b { font-weight: 600; white-space: nowrap; }
+.pill .act { flex: 1 1 0; min-width: 0; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pill[data-alert] .act { color: var(--warn-text); }
 .pill .meta { font-family: var(--mono); font-size: 11px; color: var(--muted); white-space: nowrap; }
 .pill .actions { flex-basis: 100%; display: flex; gap: 8px; padding: 6px 0 2px 18px; }
@@ -162,15 +165,37 @@ h1 { margin: 0; font-size: clamp(36px, 4.4vw, 58px); line-height: 1.02; letter-s
 @keyframes drop { from { opacity: 0; transform: translateY(-10px); } }
 
 
-/* Phones: the pitch, then the demo, then the feature list. */
-@media (max-width: 720px) {
+/* Below the width where the two columns fit side by side (tablets and phones): one centered
+   column, in reading order: the pitch, then the demo, then the feature list that drives it. */
+@media (max-width: 999px) {
+  .top, .main { max-width: 640px; }
   .top { flex-wrap: wrap; }
-  .main { flex-direction: column; align-items: stretch; }
+  .main { flex-direction: column; align-items: stretch; gap: 28px; }
   .pitch { display: contents; }
   .pitch > h1, .pitch > .lede, .pitch > .ctas, .pitch > .oss { order: 1; }
   .stage { order: 2; }
   .features, .demo-controls { order: 3; }
-  .features { margin-top: -24px; }
+  .features { margin-top: -12px; }
+}
+/* Phones: compact cards without the model and cost, so the activity has the line. */
+@media (max-width: 720px) {
+  .pill { padding: 9px 12px; gap: 4px 8px; }
+  .pill .meta { display: none; }
+  .pill .actions { padding-top: 4px; }
+  .pill .actions button { min-height: 30px; }
+  .pills { min-height: 163px; }
+  .main { padding-top: 32px; }
+  .pitch > h1, .pitch > .lede, .pitch > .oss { text-align: center; }
+  .lede { margin-inline: auto; }
+  .ctas { justify-content: center; }
+  /* Notifications drop in from the top center, as they do on a phone. */
+  .toast { left: 0; right: 0; margin-inline: auto; }
+}
+/* iPhone 16 width and narrower: smaller card and demo note text, so each stays on one line. */
+@media (max-width: 430px) {
+  .pill { font-size: 13px; }
+  .demo-controls { gap: 10px; font-size: 12px; }
+  .demo-controls span { white-space: nowrap; }
 }
 @media (prefers-reduced-motion: reduce) {
   .shimmer, .pill, .toast, .caret { animation: none; }

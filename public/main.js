@@ -326,7 +326,7 @@
       await wait(1800, id);
       return false;
     }
-    update(j, { ask: null, busy: true, text: `Approved by ${by === "you" ? "you" : "ana@example.com"}. ${doing}` });
+    update(j, { ask: null, busy: true, text: `Approved by ${by === "you" ? "you" : "Ana"}. ${doing}` });
     return true;
   }
 
@@ -354,7 +354,7 @@
         const a = job("routing", "Clef is picking a role", { busy: true, meta: "Clef Flash" });
         const first = background(async () => {
           await wait(1500, id);
-          update(a, { role: "researcher", text: "Searching the web, reading 6 release notes", meta: "Claude Opus 5.5" });
+          update(a, { role: "researcher", text: "Reading 6 release notes", meta: "Claude Opus 5.5" });
           await wait(5200, id);
           update(a, { busy: false, done: true, text: "Done. Summary ready", meta: "~$0.04 · 0:41" });
         });
@@ -376,7 +376,7 @@
         await type("Email the SDK summary to team@example.com", id);
         const j = job("comms", "Drafting the email", { busy: true });
         await wait(1800, id);
-        update(j, { busy: false, text: "Send to team@example.com: \"Agents SDK: what changed this week\"?", ask: "Approve" });
+        update(j, { busy: false, text: "Email team@example.com?", ask: "Approve" });
         const sent = await decide(j, id, 4200, "Sending");
         if (sent) {
           await wait(1200, id);
@@ -396,9 +396,9 @@
         await wait(900, id);
         const a = job("digest", "Scheduled run started", { busy: true, meta: "Mon 9:00" });
         await wait(700, id);
-        const b = job("triage", "Scheduled run: weekly support summary", { busy: true, meta: "Mon 9:00" });
+        const b = job("triage", "Weekly support summary", { busy: true, meta: "Mon 9:00" });
         await wait(2600, id);
-        update(a, { busy: false, done: true, text: "Done. 4 changes worth knowing", meta: "Mon 9:00 · ~$0.03" });
+        update(a, { busy: false, done: true, text: "Done. 4 changes found", meta: "Mon 9:00 · ~$0.03" });
         await wait(1200, id);
         update(b, { busy: false, done: true, text: "Done. 23 tickets, 2 trends", meta: "Mon 9:00 · ~$0.04" });
         await wait(1600, id);
@@ -414,9 +414,9 @@
         const j = job("triage", "Reading 14 issues in Linear", { busy: true, meta: "Linear" });
         await wait(900, id);
         await type("Check the launch plan in Notion for open questions", id);
-        const n = job("marketer", "Reading the launch plan in Notion", { busy: true, meta: "Notion" });
+        const n = job("marketer", "Reading the launch plan", { busy: true, meta: "Notion" });
         await wait(1200, id);
-        update(j, { busy: false, text: "Create a Linear issue: \"French date formats in reminders\"?", ask: "Approve" });
+        update(j, { busy: false, text: "Create a Linear issue?", ask: "Approve" });
         const created = await decide(j, id, 4000, "Creating");
         update(n, { busy: false, done: true, text: "Done. 2 open questions found", meta: "Notion · ~$0.02" });
         if (!created) return;
@@ -436,7 +436,7 @@
         await waitForApproval(3800, id);
         update(j, { ask: null, busy: true, text: "You signed in. Continuing" });
         await wait(1800, id);
-        update(j, { busy: false, done: true, text: "Done. Listing is current, 1 phone number fixed", meta: "Browser · ~$0.06" });
+        update(j, { busy: false, done: true, text: "Done. 1 phone number fixed", meta: "Browser · ~$0.06" });
         await wait(1600, id);
       },
     },
@@ -447,7 +447,7 @@
         await type("Draft the launch post, and ask me before it goes to the blog", id);
         const j = job("marketer", "Writing the launch post", { busy: true });
         await wait(2200, id);
-        update(j, { busy: false, text: "Publish \"Brightbook speaks French\" to the blog?", ask: "Approve" });
+        update(j, { busy: false, text: "Publish the launch post?", ask: "Approve" });
         state.toast = { title: "Product marketer needs you", body: "Publish \"Brightbook speaks French\" to the blog?" };
         render();
         const ok = await decide(j, id, 4600, "Publishing");
@@ -513,6 +513,22 @@
     const li = el("li", { class: "feature", style: `--hue: oklch(0.72 0.15 ${f.hue})` }, btn, el("p", { hidden: true }, f.text));
     list.append(li);
   });
+  // Reserve the longest description's height for whichever one is showing.
+  let descWidth = 0;
+  function reserveDescriptions() {
+    const ps = [...list.querySelectorAll(".feature p")];
+    const shown = ps.map((p) => !p.hidden);
+    list.style.removeProperty("--desc-h");
+    ps.forEach((p) => { p.hidden = false; });
+    const tallest = Math.max(...ps.map((p) => p.offsetHeight));
+    ps.forEach((p, k) => { p.hidden = !shown[k]; });
+    list.style.setProperty("--desc-h", tallest + "px");
+  }
+  new ResizeObserver(() => {
+    if (list.clientWidth !== descWidth) { descWidth = list.clientWidth; reserveDescriptions(); }
+  }).observe(list);
+  document.fonts.ready.then(reserveDescriptions);
+
   function markFeature(i) {
     current = i;
     [...list.children].forEach((li, k) => {
