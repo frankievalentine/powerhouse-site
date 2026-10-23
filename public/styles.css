@@ -197,6 +197,9 @@ h1 { margin: 0; font-size: clamp(36px, 4.4vw, 58px); line-height: 1.02; letter-s
 @media (max-width: 430px) {
   .pill { font-size: 13px; }
   .demo-controls { gap: 10px; font-size: 12px; }
+}
+/* The note fits on one line from iPhone mini width up; narrower, it wraps, or the page would scroll sideways. */
+@media (min-width: 375px) and (max-width: 430px) {
   .demo-controls span { white-space: nowrap; }
 }
 @media (prefers-reduced-motion: reduce) {
